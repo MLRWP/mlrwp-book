@@ -13,7 +13,7 @@ This was true in 2020 when Sarah MacDonnell (chair of the MLRWP) launched our we
 
 In the actuarial world machine learning (ML) has certainly made inroads into personal lines pricing - tight margins and high competitiveness create a large incentive to extract as much value and insight from data as possible. 
 
-However, there has been less use of machine learning in reserving, possibly due to less obvious or immediate competitive advantages. Additionally practical challenges in implementing ML, from actually using the models, to finding the time in a busy reservint team to develop the necessary skills have limited use of ML. 
+However, there has been less use of machine learning in reserving, possibly due to less obvious or immediate competitive advantages. Additionally practical challenges in implementing ML, from actually using the models, to finding the time in a busy reserving team to develop the necessary skills have limited use of ML. 
 
 But while reserving may not make extensive use of ML yet, there is recognition of its potential and a lot of interest. Ceratinly, we have observed high engagement with our material at the various conferences we have presented at.
 

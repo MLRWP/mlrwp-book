@@ -3,11 +3,13 @@ resources:
   - _glms_meyershi.csv
 ---
 
-# Reserving with GLMs in R {#sec-glms-r}
+# Reserving with GLMs {#sec-glms-r}
 
 *This [article](https://institute-and-faculty-of-actuaries.github.io/mlr-blog/post/foundations/r-glms/) was written by Grainne McGuire and originally published on 26 April 2021*
 
-*A version of this article using Python is available [here](https://institute-and-faculty-of-actuaries.github.io/mlr-blog/post/foundations/python-glms/)
+*A version of this article using Python rather than R is available [here](https://institute-and-faculty-of-actuaries.github.io/mlr-blog/post/foundations/python-glms/).*
+*It was co-authored by Gabrielle Pittarello.*
+
 
 
 An aim of the MLR working party is to promote the use of machine learning (ML) in reserving.

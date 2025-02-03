@@ -1,0 +1,14 @@
+# Introduction to Python for Reserving {#sec-intro-python}
+
+*This is taken from a forthcoming blog by Vikram Suresh, to be published in February 2025.*
+
+
+For an introduction to Python in actuarial science, the [Actuaries' Analytic Cookbook](https://actuariesinstitute.github.io/cookbook/docs/) (which is an initiative of the Young Data Analytics Working Group, a working group within the [Australian Actuaries Institute](https://actuaries.asn.au/) is a great place to start.
+
+In many of our blogs, particularly those focussing on deep learning, the code uses various packages, such as PyTorch, scikit-learn, Numpy and Pandas - a number of which are introduced in the aforementioned Cookbook. For example, PyTorch is a popular package for neural networks.
+
+Instructions on how to install the packages and set up Python can be found on the Cookbook's [Setting up your environment](https://actuariesinstitute.github.io/cookbook/docs/getting_started.html) page. You can then start working through some of the Cookbook articles, or posts on our website.
+
+Furthermore, we will be updating this book later in the year to include our recent series of blogs on using deep learning for reserving as well as our other blogs from 2023-2025 which have a greater focus on Python. In the meantime, check out the [posts on our blog](https://institute-and-faculty-of-actuaries.github.io/mlr-blog/posts.html).
+
+
