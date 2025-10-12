@@ -7,7 +7,7 @@ resources:
 
 *This [article](https://institute-and-faculty-of-actuaries.github.io/mlr-blog/post/survey/italy/) was written by Rocco Roberto Cerchiara and originally published on 3 February 2025.*
 
-![](./italy_flag.jpg)
+![](./Images/italy_flag.jpg)
 
 In 2023 (and 2020) Rocco Roberto Cerchiara conducted surveys on the use of ML in reserving in Italy.
 

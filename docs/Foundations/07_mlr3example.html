@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.450">
+<meta name="generator" content="quarto-1.5.55">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Machine Learning in Non-Life Reserving - 9&nbsp; ML modelling on triangles - a worked example</title>
+<title>9&nbsp; ML modelling on triangles - a worked example – Machine Learning in Non-Life Reserving</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -22,7 +22,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -33,7 +33,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -81,7 +81,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   "collapse-after": 3,
   "panel-placement": "start",
   "type": "textbox",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -90,39 +96,47 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
   }
 }</script>
-
 <script src="../site_libs/htmlwidgets-1.6.2/htmlwidgets.js"></script>
+
 <link href="../site_libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet">
+
 <script src="../site_libs/datatables-binding-0.30/datatables.js"></script>
+
 <script src="../site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+
 <link href="../site_libs/dt-core-1.13.4/css/jquery.dataTables.min.css" rel="stylesheet">
+
 <link href="../site_libs/dt-core-1.13.4/css/jquery.dataTables.extra.css" rel="stylesheet">
+
 <script src="../site_libs/dt-core-1.13.4/js/jquery.dataTables.min.js"></script>
+
 <link href="../site_libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet">
+
 <script src="../site_libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+
 
 
 </head>
 
 <body class="nav-sidebar floating">
 
-
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav">
     <div class="container-fluid d-flex">
-      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../Foundations/foundations.html">Foundations</a></li><li class="breadcrumb-item"><a href="../Foundations/07_mlr3example.html"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">ML modelling on triangles - a worked example</span></a></li></ol></nav>
-      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-      </a>
-      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../Foundations/foundations.html">Foundations</a></li><li class="breadcrumb-item"><a href="../Foundations/07_mlr3example.html"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">ML modelling on triangles - a worked example</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
       </button>
     </div>
@@ -131,7 +145,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Machine Learning in Non-Life Reserving</a> 
@@ -160,7 +174,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div class="sidebar-item-container"> 
             <a href="../Foundations/foundations.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Foundations</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -225,7 +239,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div class="sidebar-item-container"> 
             <a href="../Data/data.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Data</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -248,7 +262,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div class="sidebar-item-container"> 
             <a href="../Literature/literature.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Literature review</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -277,7 +291,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div class="sidebar-item-container"> 
             <a href="../Research/research.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Research</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -306,7 +320,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div class="sidebar-item-container"> 
             <a href="../Practical/practical.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Practical Considerations</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -323,7 +337,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div class="sidebar-item-container"> 
             <a href="../Survey/survey.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Surveys</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -334,18 +348,24 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">2020 Surveys of the use of ML in reserving</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../Survey/surveyitaly.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Survey of the 2023 Italian Market</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../summary.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Summary</span></span></a>
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Summary</span></span></a>
   </div>
 </li>
     </ul>
     </div>
 </nav>
-<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
@@ -410,7 +430,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../Foundations/foundations.html">Foundations</a></li><li class="breadcrumb-item"><a href="../Foundations/07_mlr3example.html"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">ML modelling on triangles - a worked example</span></a></li></ol></nav>
 <div class="quarto-title">
 <h1 class="title"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">ML modelling on triangles - a worked example</span></h1>
 </div>
@@ -425,7 +445,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </div>
   
 
+
 </header>
+
 
 <p><em>This <a href="https://institute-and-faculty-of-actuaries.github.io/mlr-blog/post/foundations/mlr3example/">article</a> was written by Grainne McGuire and Jacky Poon and originally published on 5 May 2021.</em></p>
 <p><em>A python version (including a simple neural network) is available <a href="https://institute-and-faculty-of-actuaries.github.io/mlr-blog/post/foundations/scikitexample/">here</a>.</em></p>
@@ -449,8 +471,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 data-number="9.2" class="anchored" data-anchor-id="pre-requisites-to-this-article"><span class="header-section-number">9.2</span> Pre-requisites to this article</h2>
 <p>We’ve tried to make this article accessible to people new to ML, and to make this article stand-alone. Having some knowledge about basic machine learning techniques like decision trees, random forests and XGBoost (gradient boosting) will help. Furthermore, we also fit the Chainladder model as a GLM (sometimes referred to as a Stochastic Chainladder) and fit a particular type of LASSO model. We’ve included limited details on these models here - our previous chapters have more details on these:</p>
 <ul>
-<li>Reserving with GLMs - see <a href="05_a_glms_r.html"><span>Chapter&nbsp;7</span></a></li>
-<li>Self-assembling claim reserving models using the LASSO - see <a href="06_lasso.html"><span>Chapter&nbsp;8</span></a></li>
+<li>Reserving with GLMs - see <a href="05_a_glms_r.html" class="quarto-xref"><span>Chapter 7</span></a></li>
+<li>Self-assembling claim reserving models using the LASSO - see <a href="06_lasso.html" class="quarto-xref"><span>Chapter 8</span></a></li>
 </ul>
 <section id="the-data-set" class="level3" data-number="9.2.1">
 <h3 data-number="9.2.1" class="anchored" data-anchor-id="the-data-set"><span class="header-section-number">9.2.1</span> The data set</h3>
@@ -636,7 +658,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>We’re using a simulated data triangle with all values (past and future).</p>
 <div class="cell">
 <div class="cell-output-display">
-<p><img src="07_mlr3example_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="07_mlr3example_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>The data set we use is the simulated data set 3 from this <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3241906">paper</a>. It is available in CSV form <a href="https://institute-and-faculty-of-actuaries.github.io/mlr-blog/csv/lasso_simdata3.csv">here</a>.</p>
@@ -704,7 +730,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 ℹ Please use `linewidth` instead.</code></pre>
 </div>
 <div class="cell-output-display">
-<p><img src="07_mlr3example_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="07_mlr3example_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>The step-up in payments can be modelled as an interaction between accident and development quarters. Because it affects only a small number of past values, it may be difficult for some of the modelling approaches to capture this. It’s likely, therefore, that the main differentiator between the performance of different methods for this data set will be how much well they capture this interaction.</p>
@@ -860,7 +890,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><strong>Random test data set</strong></p>
 <div class="cell">
 <div class="cell-output-display">
-<p><img src="07_mlr3example_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="07_mlr3example_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>Cross-validation repeats this type of split a number of times.</p>
@@ -880,7 +914,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="07_mlr3example_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="07_mlr3example_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -905,7 +939,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Below we show the allocation of points into test and train for each fold - the dark blue points are the test subset in each of the 6 folds.</p>
 <div class="cell">
 <div class="cell-output-display">
-<p><img src="07_mlr3example_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="07_mlr3example_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
@@ -962,7 +1000,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualise the tree</span></span>
 <span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>rpart.plot<span class="sc">::</span><span class="fu">rpart.plot</span>(lrn_rpart_default<span class="sc">$</span>model, <span class="at">roundint =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="07_mlr3example_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="07_mlr3example_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>If you are unfamiliar with decision tree diagrams, the model specifies that, for example, for accident years greater than 17, with development periods less than 7.5 (ie 7 or under) and less than 4.5, the predicted claim cost is $43m.</p>
@@ -1090,7 +1132,11 @@ $minsplit
 <span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="co"># plot the model</span></span>
 <span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>rpart.plot<span class="sc">::</span><span class="fu">rpart.plot</span>(lrn_rpart_tuned<span class="sc">$</span>model, <span class="at">roundint =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="07_mlr3example_files/figure-html/unnamed-chunk-27-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="07_mlr3example_files/figure-html/unnamed-chunk-27-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>This model is much more complicated than the original and looks overfitted - we’ll see if this is the case when we evaluate the model performance later in the article.</p>
@@ -1406,7 +1452,6 @@ $max_depth
 <p>The table below shows the results we got from 500 evaluations along with the results we got in earlier development work for this article (the hyper-parameter tuning results are subject to randomness, first due to the specification of the cross-validation folds and second due to the random search). We’ll use these when looking at the model.</p>
 <div class="cell">
 <div class="cell-output-display">
-
 <div class="datatables html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-997a1c381f2412d5e20b" style="width:100%;height:auto;"></div>
 <script type="application/json" data-for="htmlwidget-997a1c381f2412d5e20b">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5"],["nrounds","tweedie_variance_power","eta","gamma[fixed]","max_depth"],["265","1.011768","0.2310797","0","3"],["233","1.01","0.3","0","3"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Hyperparameter<\/th>\n      <th>Evals500<\/th>\n      <th>Best<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 </div>
@@ -1748,7 +1793,11 @@ $max_depth
 <div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check the path includes a minimum value of error</span></span>
 <span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(lrn_cv_glmnet<span class="sc">$</span>model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="07_mlr3example_files/figure-html/unnamed-chunk-45-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="07_mlr3example_files/figure-html/unnamed-chunk-45-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>The two dotted lines in this plot represent two special penalty (or <code>lambda</code> values):</p>
@@ -1837,7 +1886,6 @@ $max_depth
 <span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">datatable</span>() <span class="sc">|&gt;</span> </span>
 <span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">formatRound</span>(<span class="st">"rmse"</span>, <span class="at">digits =</span> <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-
 <div class="datatables html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-ffcd71c060a4714b2f7e" style="width:100%;height:auto;"></div>
 <script type="application/json" data-for="htmlwidget-ffcd71c060a4714b2f7e">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6"],["regr.xgboost_prev","regr.xgboost","regr.cv_glmnet","regr.rpart","regr.ranger","regr.glm"],[820,820,820,820,820,820],[31287526.23669044,31727443.05581634,46966366.66331225,63506567.6623271,66490085.44926514,138528927.1351613]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>model<\/th>\n      <th>num<\/th>\n      <th>rmse<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"targets":3,"render":"function(data, type, row, meta) {\n    return type !== 'display' ? data : DTWidget.formatRound(data, 0, 3, \",\", \".\", null);\n  }"},{"className":"dt-right","targets":[2,3]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":["options.columnDefs.0.render"],"jsHooks":[]}</script>
 </div>
@@ -1850,7 +1898,6 @@ $max_depth
 <span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">datatable</span>() <span class="sc">|&gt;</span> </span>
 <span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">formatRound</span>(<span class="st">"rmse"</span>, <span class="at">digits =</span> <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-
 <div class="datatables html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-bdb8aee9d4577f96d6d4" style="width:100%;height:auto;"></div>
 <script type="application/json" data-for="htmlwidget-bdb8aee9d4577f96d6d4">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6"],["regr.cv_glmnet","regr.xgboost","regr.xgboost_prev","regr.ranger","regr.glm","regr.rpart"],[780,780,780,780,780,780],[251388945.5939648,525024693.9861256,750897301.7702339,820612713.4388899,1722472389.667281,1916306263.6574]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>model<\/th>\n      <th>num<\/th>\n      <th>rmse<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"targets":3,"render":"function(data, type, row, meta) {\n    return type !== 'display' ? data : DTWidget.formatRound(data, 0, 3, \",\", \".\", null);\n  }"},{"className":"dt-right","targets":[2,3]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":["options.columnDefs.0.render"],"jsHooks":[]}</script>
 </div>
@@ -1894,7 +1941,11 @@ $max_depth
 ℹ Please use the `linewidth` argument instead.</code></pre>
 </div>
 <div class="cell-output-display">
-<p><img src="07_mlr3example_files/figure-html/unnamed-chunk-51-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="07_mlr3example_files/figure-html/unnamed-chunk-51-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>Some things are apparent from this:</p>
@@ -1969,7 +2020,11 @@ $max_depth
 </div>
 <div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>g<span class="sc">$</span>graph</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="07_mlr3example_files/figure-html/unnamed-chunk-53-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="07_mlr3example_files/figure-html/unnamed-chunk-53-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>All models have shortcomings, but the LASSO and previously tuned XGBoost models outperform the others.</p>
@@ -2099,7 +2154,11 @@ $max_depth
 <span id="cb67-5"><a href="#cb67-5" aria-hidden="true" tabindex="-1"></a>          <span class="at">secondary_predictor_val =</span> <span class="dv">5</span>,</span>
 <span id="cb67-6"><a href="#cb67-6" aria-hidden="true" tabindex="-1"></a>          <span class="at">xaxis_label =</span> <span class="st">"Accident Quarter"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="07_mlr3example_files/figure-html/unnamed-chunk-56-1.png" class="img-fluid" width="768"></p>
+<div>
+<figure class="figure">
+<p><img src="07_mlr3example_files/figure-html/unnamed-chunk-56-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>Because this is mostly old data and because it is not affected by the interaction, the tracking should be generally good, even for the Chain ladder - which is the case (apart from the final quarter being a bit wild as can happen with a Chain ladder). The decision tree model is poor, the random forest and XGBoost model show some evidence of overfitting. The LASSO model seems to strike the right balance.</p>
@@ -2113,7 +2172,11 @@ $max_depth
 <span id="cb68-5"><a href="#cb68-5" aria-hidden="true" tabindex="-1"></a>          <span class="at">secondary_predictor_val =</span> <span class="dv">24</span>,</span>
 <span id="cb68-6"><a href="#cb68-6" aria-hidden="true" tabindex="-1"></a>          <span class="at">xaxis_label =</span> <span class="st">"Accident Quarter"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="07_mlr3example_files/figure-html/unnamed-chunk-57-1.png" class="img-fluid" width="768"></p>
+<div>
+<figure class="figure">
+<p><img src="07_mlr3example_files/figure-html/unnamed-chunk-57-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>Development quarter 24 is impacted by the interactions for accident quarters&gt;17. All models reflect this to different extents, with XGBoost and the LASSO doing the best.</p>
@@ -2126,7 +2189,11 @@ $max_depth
 <span id="cb69-5"><a href="#cb69-5" aria-hidden="true" tabindex="-1"></a>          <span class="at">secondary_predictor_val =</span> <span class="dv">35</span>,</span>
 <span id="cb69-6"><a href="#cb69-6" aria-hidden="true" tabindex="-1"></a>          <span class="at">xaxis_label =</span> <span class="st">"Accident Quarter"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="07_mlr3example_files/figure-html/unnamed-chunk-58-1.png" class="img-fluid" width="768"></p>
+<div>
+<figure class="figure">
+<p><img src="07_mlr3example_files/figure-html/unnamed-chunk-58-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>This is quite hard for the models since most of the values are in the future. XGBoost (previously tuned) and the LASSO are the best here.</p>
@@ -2140,7 +2207,11 @@ $max_depth
 <span id="cb70-5"><a href="#cb70-5" aria-hidden="true" tabindex="-1"></a>          <span class="at">secondary_predictor_val =</span> <span class="dv">5</span>,</span>
 <span id="cb70-6"><a href="#cb70-6" aria-hidden="true" tabindex="-1"></a>          <span class="at">xaxis_label =</span> <span class="st">"Development Quarter"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="07_mlr3example_files/figure-html/unnamed-chunk-59-1.png" class="img-fluid" width="768"></p>
+<div>
+<figure class="figure">
+<p><img src="07_mlr3example_files/figure-html/unnamed-chunk-59-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
 </div>
 </div>
 <p><strong>Tracking for development quarter when accident quarter = 20</strong></p>
@@ -2152,7 +2223,11 @@ $max_depth
 <span id="cb71-5"><a href="#cb71-5" aria-hidden="true" tabindex="-1"></a>          <span class="at">secondary_predictor_val =</span> <span class="dv">20</span>,</span>
 <span id="cb71-6"><a href="#cb71-6" aria-hidden="true" tabindex="-1"></a>          <span class="at">xaxis_label =</span> <span class="st">"Development Quarter"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="07_mlr3example_files/figure-html/unnamed-chunk-60-1.png" class="img-fluid" width="768"></p>
+<div>
+<figure class="figure">
+<p><img src="07_mlr3example_files/figure-html/unnamed-chunk-60-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
@@ -2202,14 +2277,22 @@ $max_depth
 <span id="cb72-31"><a href="#cb72-31" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb72-32"><a href="#cb72-32" aria-hidden="true" tabindex="-1"></a>g1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="07_mlr3example_files/figure-html/unnamed-chunk-61-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="07_mlr3example_files/figure-html/unnamed-chunk-61-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>Let’s look at a zoomed in version of this plot.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a>g1 <span class="sc">+</span> <span class="fu">coord_cartesian</span>(<span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">40</span>), <span class="at">xlim=</span><span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">40</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="07_mlr3example_files/figure-html/unnamed-chunk-62-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="07_mlr3example_files/figure-html/unnamed-chunk-62-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>Finally, here are the overall reserves, summed over all accident quarters</p>
@@ -2230,7 +2313,6 @@ $max_depth
 <span id="cb74-14"><a href="#cb74-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">formatRound</span>(<span class="st">"Reserve(Bn)"</span>, <span class="at">digits =</span> <span class="dv">1</span>) <span class="sc">|&gt;</span> </span>
 <span id="cb74-15"><a href="#cb74-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">formatPercentage</span>(<span class="st">"Ratio to actual(%)"</span>, <span class="at">digits =</span> <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-
 <div class="datatables html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-ee91a2ee24c81ec32bf2" style="width:100%;height:auto;"></div>
 <script type="application/json" data-for="htmlwidget-ee91a2ee24c81ec32bf2">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6","7"],["regr.rpart","regr.xgboost_prev","regr.ranger","regr.xgboost","regr.cv_glmnet","actual","regr.glm"],[1680.145847816887,931.6348768207499,845.1389739097615,774.8098594735626,627.6456864709465,608.4863200373112,563.0650857197218],[2.761189187809291,1.531069551019033,1.388920253553012,1.273339817115449,1.031486930441527,1,0.9253537297029055]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Model<\/th>\n      <th>Reserve(Bn)<\/th>\n      <th>Ratio to actual(%)<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"targets":3,"render":"function(data, type, row, meta) {\n    return type !== 'display' ? data : DTWidget.formatPercentage(data, 0, 3, \",\", \".\", null);\n  }"},{"targets":2,"render":"function(data, type, row, meta) {\n    return type !== 'display' ? data : DTWidget.formatRound(data, 1, 3, \",\", \".\", null);\n  }"},{"className":"dt-right","targets":[2,3]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":["options.columnDefs.0.render","options.columnDefs.1.render"],"jsHooks":[]}</script>
 </div>
@@ -2250,7 +2332,11 @@ $max_depth
 <p>So what’s going on? It might be helpful to have another look at the folds used in the cross-validation. These are shown below - the yellow dots represent training data points in each fold, the blue dots are the test data. The grey rectangle marks the interaction.</p>
 <div class="cell">
 <div class="cell-output-display">
-<p><img src="07_mlr3example_files/figure-html/unnamed-chunk-65-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="07_mlr3example_files/figure-html/unnamed-chunk-65-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>The first thing that is apparent is that the interaction only applies to a very small number of points (10) in the past data. So in that sense, it’s quite remarkable that the models perform as well as they actually do - they all detect the interaction. Where they start to slip up is that they do not necessarily follow the development quarter shape in the tail.</p>
@@ -2485,18 +2571,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-  });
-  clipboard.on('success', function(e) {
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -2528,11 +2603,50 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
-  function tippyHover(el, contentFn) {
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -2542,8 +2656,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -2555,7 +2678,130 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -2599,6 +2845,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -2624,6 +2871,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -2685,17 +2958,18 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../Foundations/06_lasso.html" class="pagination-link">
+      <a href="../Foundations/06_lasso.html" class="pagination-link" aria-label="Self-assembling claim reserving models using the LASSO">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Self-assembling claim reserving models using the LASSO</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../Foundations/08_intro_glm_gam_xgboost.html" class="pagination-link">
+      <a href="../Foundations/08_intro_glm_gam_xgboost.html" class="pagination-link" aria-label="Getting to grips with GLM, GAM and XGBoost">
         <span class="nav-page-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Getting to grips with GLM, GAM and XGBoost</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
 </div> <!-- /content -->
+
 
 
 
