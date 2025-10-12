@@ -5,7 +5,7 @@ project:
 book:
   title: "Machine Learning in Non-Life Reserving"
   author: "Machine Learning in Reserving Working Party"
-  date: "28 October 2023"
+  date: "12 October 2025"
   page-navigation: true
   chapters:
     # introduction material
@@ -57,6 +57,7 @@ book:
     - part: Survey/survey.qmd
       chapters:
         - Survey/surveys2020.qmd
+        - Survey/surveyitaly.qmd
 
 
     # concluding material

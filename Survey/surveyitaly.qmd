@@ -1,0 +1,32 @@
+---
+resources: 
+  - _Survey_ML_Italy_2023_2024.pdf
+---
+
+# Survey of the 2023 Italian Market
+
+*This [article](https://institute-and-faculty-of-actuaries.github.io/mlr-blog/post/survey/italy/) was written by Rocco Roberto Cerchiara and originally published on 3 February 2025.*
+
+![](./Images/italy_flag.jpg)
+
+In 2023 (and 2020) Rocco Roberto Cerchiara conducted surveys on the use of ML in reserving in Italy.
+
+The survey found that there was enthusiasm for developing techniques for machine learning in reserving. Whilst there has been a large interest in the actuarial offices, management is more cautious.
+
+The main findings were:
+
+-   Companies are at very different stages in their research, but overall we are still at an early stage
+-   The main barriers companies were finding were:
+    -   Data Quality
+    -   Lack of best practice
+    -   Time and resource constraints, and skills.
+
+There was less appetite within companies with Standard Formula and/or small/medium companies.
+
+Insurance companies reported that they were at an early knowledge-gathering stage regarding the use of ML algorithms, adopted mainly for the optimization of internal processes and, only in limited cases, in the relations with policyholders.
+
+Further details are available in this [slide deck](./_Survey_ML_Italy_2023_2024.pdf).
+
+## About the author
+
+-   [Rocco Roberto Cerchiara](https://institute-and-faculty-of-actuaries.github.io/mlr-blog/authors/rrcerchiara/)

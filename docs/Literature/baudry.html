@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.450">
+<meta name="generator" content="quarto-1.5.55">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Machine Learning in Non-Life Reserving - 13&nbsp; Non-parametric individual claim reserving in insurance</title>
+<title>13&nbsp; Non-parametric individual claim reserving in insurance – Machine Learning in Non-Life Reserving</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -22,7 +22,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -33,7 +33,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -81,7 +81,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   "collapse-after": 3,
   "panel-placement": "start",
   "type": "textbox",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -90,41 +96,76 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
   }
 }</script>
-
 <script src="../site_libs/htmlwidgets-1.6.2/htmlwidgets.js"></script>
+
 <link href="../site_libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet">
+
 <script src="../site_libs/datatables-binding-0.30/datatables.js"></script>
+
 <script src="../site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+
 <link href="../site_libs/dt-core-1.13.4/css/jquery.dataTables.min.css" rel="stylesheet">
+
 <link href="../site_libs/dt-core-1.13.4/css/jquery.dataTables.extra.css" rel="stylesheet">
+
 <script src="../site_libs/dt-core-1.13.4/js/jquery.dataTables.min.js"></script>
+
 <link href="../site_libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet">
+
 <script src="../site_libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
 
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
 <body class="nav-sidebar floating">
 
-
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav">
     <div class="container-fluid d-flex">
-      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../Literature/literature.html">Literature review</a></li><li class="breadcrumb-item"><a href="../Literature/baudry.html"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Non-parametric individual claim reserving in insurance</span></a></li></ol></nav>
-      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-      </a>
-      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../Literature/literature.html">Literature review</a></li><li class="breadcrumb-item"><a href="../Literature/baudry.html"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Non-parametric individual claim reserving in insurance</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
       </button>
     </div>
@@ -133,7 +174,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Machine Learning in Non-Life Reserving</a> 
@@ -162,7 +203,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div class="sidebar-item-container"> 
             <a href="../Foundations/foundations.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Foundations</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -227,7 +268,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div class="sidebar-item-container"> 
             <a href="../Data/data.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Data</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -250,7 +291,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div class="sidebar-item-container"> 
             <a href="../Literature/literature.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Literature review</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -279,7 +320,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div class="sidebar-item-container"> 
             <a href="../Research/research.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Research</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -308,7 +349,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div class="sidebar-item-container"> 
             <a href="../Practical/practical.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Practical Considerations</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -325,7 +366,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div class="sidebar-item-container"> 
             <a href="../Survey/survey.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Surveys</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -336,18 +377,24 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">2020 Surveys of the use of ML in reserving</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../Survey/surveyitaly.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Survey of the 2023 Italian Market</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../summary.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Summary</span></span></a>
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Summary</span></span></a>
   </div>
 </li>
     </ul>
     </div>
 </nav>
-<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
@@ -381,7 +428,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../Literature/literature.html">Literature review</a></li><li class="breadcrumb-item"><a href="../Literature/baudry.html"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Non-parametric individual claim reserving in insurance</span></a></li></ol></nav>
 <div class="quarto-title">
 <h1 class="title"><span id="sec-baudry" class="quarto-section-identifier"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Non-parametric individual claim reserving in insurance</span></span></h1>
 </div>
@@ -396,7 +443,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </div>
   
 
+
 </header>
+
 
 <p><em>This was originally published as a series of 3 blog posts, with the first one being <a href="https://institute-and-faculty-of-actuaries.github.io/mlr-blog/post/literature-review/baudry-part1/">here</a> and was written by Nigel Carpenter.</em> <em>The blogs were published between 13 - 30 November 2020.</em></p>
 <section id="introduction" class="level2" data-number="13.1">
@@ -459,7 +508,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="fu">datatable</span>(<span class="fu">head</span>(dt_policydates))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-
 <div class="datatables html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-1214300544f0d7fd8fc8" style="width:100%;height:auto;"></div>
 <script type="application/json" data-for="htmlwidget-1214300544f0d7fd8fc8">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6"],["2016-01-01","2016-01-02","2016-01-03","2016-01-04","2016-01-05","2016-01-06"],[685,731,655,703,745,712],["2017-01-01","2017-01-02","2017-01-03","2017-01-04","2017-01-05","2017-01-06"],[366,366,366,366,366,366],[20160101,20160102,20160103,20160104,20160105,20160106],[171,183,164,176,186,178],[308,329,295,316,335,320],[206,219,196,211,224,214]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>date_UW<\/th>\n      <th>policycount<\/th>\n      <th>date_lapse<\/th>\n      <th>expodays<\/th>\n      <th>pol_prefix<\/th>\n      <th>Cover_B<\/th>\n      <th>Cover_BO<\/th>\n      <th>Cover_BOT<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[2,4,5,6,7,8]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 </div>
@@ -480,7 +528,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(dt_policy) <span class="sc">|&gt;</span> <span class="fu">datatable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-
 <div class="datatables html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-6ae44d7ebd44ea771d3d" style="width:100%;height:auto;"></div>
 <script type="application/json" data-for="htmlwidget-6ae44d7ebd44ea771d3d">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6"],["2016-01-01","2016-01-01","2016-01-01","2016-01-01","2016-01-01","2016-01-01"],[20160101,20160101,20160101,20160101,20160101,20160101],[1,2,3,4,5,6],["201601010001","201601010002","201601010003","201601010004","201601010005","201601010006"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>date_UW<\/th>\n      <th>pol_prefix<\/th>\n      <th>pol_seq<\/th>\n      <th>pol_number<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[2,3]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 </div>
@@ -518,7 +565,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a><span class="co"># check output</span></span>
 <span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(dt_policy) <span class="sc">|&gt;</span> <span class="fu">datatable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-
 <div class="datatables html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-acfd734343ea5f5bd4b3" style="width:100%;height:auto;"></div>
 <script type="application/json" data-for="htmlwidget-acfd734343ea5f5bd4b3">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6"],["2016-01-01","2016-01-01","2016-01-01","2016-01-01","2016-01-01","2016-01-01"],["201601010001","201601010002","201601010003","201601010004","201601010005","201601010006"],["2017-01-01","2017-01-01","2017-01-01","2017-01-01","2017-01-01","2017-01-01"],[366,366,366,366,366,366],["B","B","B","B","B","B"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>date_UW<\/th>\n      <th>pol_number<\/th>\n      <th>date_lapse<\/th>\n      <th>expodays<\/th>\n      <th>Cover<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":4},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 </div>
@@ -543,7 +589,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="co"># check output</span></span>
 <span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(dt_policy) <span class="sc">|&gt;</span> <span class="fu">datatable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-
 <div class="datatables html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-452913fad04a2794e4df" style="width:100%;height:auto;"></div>
 <script type="application/json" data-for="htmlwidget-452913fad04a2794e4df">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6"],["2016-01-01","2016-01-01","2016-01-01","2016-01-01","2016-01-01","2016-01-01"],["201601010001","201601010002","201601010003","201601010004","201601010005","201601010006"],["2017-01-01","2017-01-01","2017-01-01","2017-01-01","2017-01-01","2017-01-01"],[366,366,366,366,366,366],["B","B","B","B","B","B"],[1,1,1,1,1,1],[600,600,600,600,600,600],[3,3,3,3,3,3],[1.520875,1.520875,1.520875,1.520875,1.520875,1.520875],[913,913,913,913,913,913]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>date_UW<\/th>\n      <th>pol_number<\/th>\n      <th>date_lapse<\/th>\n      <th>expodays<\/th>\n      <th>Cover<\/th>\n      <th>Brand<\/th>\n      <th>Base_Price<\/th>\n      <th>Model<\/th>\n      <th>Model_mult<\/th>\n      <th>Price<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[4,6,7,8,9,10]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 </div>
@@ -567,7 +612,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="co"># check output</span></span>
 <span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(dt_policy) <span class="sc">|&gt;</span> <span class="fu">datatable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-
 <div class="datatables html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-39522a00a14b8d422f13" style="width:100%;height:auto;"></div>
 <script type="application/json" data-for="htmlwidget-39522a00a14b8d422f13">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6"],["201601010001","201601010002","201601010003","201601010004","201601010005","201601010006"],["2016-01-01","2016-01-01","2016-01-01","2016-01-01","2016-01-01","2016-01-01"],["2017-01-01","2017-01-01","2017-01-01","2017-01-01","2017-01-01","2017-01-01"],["B","B","B","B","B","B"],[1,1,1,1,1,1],[3,3,3,3,3,3],[913,913,913,913,913,913]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>pol_number<\/th>\n      <th>date_UW<\/th>\n      <th>date_lapse<\/th>\n      <th>Cover<\/th>\n      <th>Brand<\/th>\n      <th>Model<\/th>\n      <th>Price<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[5,6,7]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 </div>
@@ -597,7 +641,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co"># check output</span></span>
 <span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(dt_claim) <span class="sc">|&gt;</span> <span class="fu">datatable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-
 <div class="datatables html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-ff598303d9c0d8fc50d4" style="width:100%;height:auto;"></div>
 <script type="application/json" data-for="htmlwidget-ff598303d9c0d8fc50d4">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6"],["201609240670","201603270380","201701120212","201712180024","201608060340","201705220523"],["B","B","B","B","B","B"],[1,1,1,1,1,1],[0.3590418576988076,0.466384360291419,0.3510691796769418,0.1197983404296855,0.2088681089778344,0.1692972439072688]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>pol_number<\/th>\n      <th>claim_type<\/th>\n      <th>claim_count<\/th>\n      <th>claim_sev<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[3,4]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 </div>
@@ -622,7 +665,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="co"># check output</span></span>
 <span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(dt_claim) <span class="sc">|&gt;</span> <span class="fu">datatable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-
 <div class="datatables html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-2390a6f83a44dc881ec5" style="width:100%;height:auto;"></div>
 <script type="application/json" data-for="htmlwidget-2390a6f83a44dc881ec5">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6"],["201609240670","201603270380","201701120212","201712180024","201608060340","201705220523"],["B","B","B","B","B","B"],[1,1,1,1,1,1],[0.3590418576988076,0.466384360291419,0.3510691796769418,0.1197983404296855,0.2088681089778344,0.1692972439072688]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>pol_number<\/th>\n      <th>claim_type<\/th>\n      <th>claim_count<\/th>\n      <th>claim_sev<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[3,4]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 </div>
@@ -651,13 +693,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a><span class="co"># check output</span></span>
 <span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(dt_claim) <span class="sc">|&gt;</span> <span class="fu">datatable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-
 <div class="datatables html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-289e224830e2faa55190" style="width:100%;height:auto;"></div>
 <script type="application/json" data-for="htmlwidget-289e224830e2faa55190">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6"],["201609240670","201603270380","201701120212","201712180024","201608060340","201705220523"],["B","B","B","B","B","B"],[1,1,1,1,1,1],[0.3590418576988076,0.466384360291419,0.3510691796769418,0.1197983404296855,0.2088681089778344,0.1692972439072688]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>pol_number<\/th>\n      <th>claim_type<\/th>\n      <th>claim_count<\/th>\n      <th>claim_sev<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[3,4]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 </div>
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(dt_claim) <span class="sc">|&gt;</span> <span class="fu">datatable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-
 <div class="datatables html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-4c6bae5ce9340fe0e58e" style="width:100%;height:auto;"></div>
 <script type="application/json" data-for="htmlwidget-4c6bae5ce9340fe0e58e">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6"],["201704210215","201608210355","201612010350","201704110252","201707250328","201706120306"],["T","T","T","T","T","T"],[1,1,1,1,1,1],[0.6739729639855715,0.9690332543272451,0.8845218526960603,0.9179720141996675,0.9178734732523913,0.981890028655961]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>pol_number<\/th>\n      <th>claim_type<\/th>\n      <th>claim_count<\/th>\n      <th>claim_sev<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[3,4]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 </div>
@@ -684,7 +724,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="co"># check output</span></span>
 <span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(dt_claim) <span class="sc">|&gt;</span> <span class="fu">datatable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-
 <div class="datatables html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-5a958740c5f0d5c504d9" style="width:100%;height:auto;"></div>
 <script type="application/json" data-for="htmlwidget-5a958740c5f0d5c504d9">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6"],["201601010016","201601010043","201601010047","201601010056","201601010057","201601010073"],["B","B","B","B","B","B"],[1,1,1,1,1,1],[0.2065752614737574,0.5047322420828098,0.07904096530883066,0.1388380097237714,0.2124692030180903,0.1026778162264535],["2016-01-01","2016-01-01","2016-01-01","2016-01-01","2016-01-01","2016-01-01"],[457,913,913,457,457,837],[3,1,1,3,3,2]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>pol_number<\/th>\n      <th>claim_type<\/th>\n      <th>claim_count<\/th>\n      <th>claim_sev<\/th>\n      <th>date_UW<\/th>\n      <th>Price<\/th>\n      <th>Brand<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[3,4,6,7]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 </div>
@@ -711,7 +750,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a><span class="co"># check output</span></span>
 <span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(dt_claim) <span class="sc">|&gt;</span> <span class="fu">datatable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-
 <div class="datatables html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-081ee942a81f341651d5" style="width:100%;height:auto;"></div>
 <script type="application/json" data-for="htmlwidget-081ee942a81f341651d5">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6"],["201601010016","201601010043","201601010047","201601010056","201601010057","201601010073"],["B","B","B","B","B","B"],[1,1,1,1,1,1],[0.2065752614737574,0.5047322420828098,0.07904096530883066,0.1388380097237714,0.2124692030180903,0.1026778162264535],["2016-01-01","2016-01-01","2016-01-01","2016-01-01","2016-01-01","2016-01-01"],[457,913,913,457,457,837],[3,1,1,3,3,2],["2017-01-01","2017-01-01","2017-01-01","2017-01-01","2017-01-01","2017-01-01"],[366,366,366,366,366,366],[169,30,120,77,95,298],[0,0,73,0,5,5],[37,32,29,27,18,24],["2016-06-18","2016-01-31","2016-04-30","2016-03-18","2016-04-05","2016-10-25"],["2016-06-18","2016-01-31","2016-07-12","2016-03-18","2016-04-10","2016-10-30"],["2016-07-25","2016-03-03","2016-08-10","2016-04-14","2016-04-28","2016-11-23"],[94,461,72,63,97,86]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>pol_number<\/th>\n      <th>claim_type<\/th>\n      <th>claim_count<\/th>\n      <th>claim_sev<\/th>\n      <th>date_UW<\/th>\n      <th>Price<\/th>\n      <th>Brand<\/th>\n      <th>date_lapse<\/th>\n      <th>expodays<\/th>\n      <th>occ_delay_days<\/th>\n      <th>delay_report<\/th>\n      <th>delay_pay<\/th>\n      <th>date_occur<\/th>\n      <th>date_report<\/th>\n      <th>date_pay<\/th>\n      <th>claim_cost<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[3,4,6,7,9,10,11,12,16]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 </div>
@@ -750,7 +788,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a><span class="co"># check output</span></span>
 <span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(dt_claim) <span class="sc">|&gt;</span> <span class="fu">datatable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-
 <div class="datatables html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-3996f87218251da5e783" style="width:100%;height:auto;"></div>
 <script type="application/json" data-for="htmlwidget-3996f87218251da5e783">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6"],["201606180001","201601310001","201604300001","201603180001","201604050001","201610250001"],["201601010016","201601010043","201601010047","201601010056","201601010057","201601010073"],["B","B","B","B","B","B"],[1,1,1,1,1,1],[0.2065752614737574,0.5047322420828098,0.07904096530883066,0.1388380097237714,0.2124692030180903,0.1026778162264535],["2016-06-18","2016-01-31","2016-04-30","2016-03-18","2016-04-05","2016-10-25"],["2016-06-18","2016-01-31","2016-07-12","2016-03-18","2016-04-10","2016-10-30"],["2016-07-25","2016-03-03","2016-08-10","2016-04-14","2016-04-28","2016-11-23"],[94,461,72,63,97,86]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>clm_number<\/th>\n      <th>pol_number<\/th>\n      <th>claim_type<\/th>\n      <th>claim_count<\/th>\n      <th>claim_sev<\/th>\n      <th>date_occur<\/th>\n      <th>date_report<\/th>\n      <th>date_pay<\/th>\n      <th>claim_cost<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[4,5,9]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 </div>
@@ -768,7 +805,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 ℹ Please use `after_stat(prop)` instead.</code></pre>
 </div>
 <div class="cell-output-display">
-<p><img src="baudry_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="baudry_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <div class="cell">
@@ -777,14 +818,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(dt_claim[, Days_reportdelay],<span class="at">breaks =</span> <span class="dv">50</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="baudry_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="baudry_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>dt_claim[, Days_paymentdelay <span class="sc">:</span><span class="er">=</span> <span class="fu">as.numeric</span>(<span class="fu">difftime</span>(date_pay, date_report, <span class="at">units=</span><span class="st">"days"</span>))]</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(dt_claim[, Days_paymentdelay],<span class="at">breaks =</span> <span class="dv">60</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="baudry_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="baudry_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>The final set of exhibits are those on slide 44. The only difference of note here is in Chart B, the Claim Rate by phone brand.</p>
@@ -792,7 +841,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>I leave the code as is noting the difference but recognising that it will not affect the wider aims of the paper.</p>
 <div class="cell">
 <div class="cell-output-display">
-<p><img src="baudry_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="baudry_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
@@ -997,7 +1050,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="Images/baudry_image_2.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Graphical representation of IBNR and RBNS claims.</figcaption>
+<figcaption>Graphical representation of IBNR and RBNS claims.</figcaption>
 </figure>
 </div>
 <p>The data requirements for this approach to reserving are more akin to those used in Pricing. Policy underwriting features are directly used in the reserving process requiring policy and claim records to be joined at the policy exposure period level of granularity. In fact I’d say the data requirements are equivalent to a pricing dataset with two added levels of complexity.</p>
@@ -1008,7 +1061,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p>claim settlement features such as claim handler hours worked or claims system downtime can be included by joining on claim processing date. This, you could imagine, would help explain internal variation in claim payment patterns.</p></li>
 </ul>
 <p>The table below summarises the reserve models Baudry builds and the classes of explanatory data features each model uses.</p>
-<table class="table">
+<table class="caption-top table">
 <colgroup>
 <col style="width: 13%">
 <col style="width: 45%">
@@ -1090,7 +1143,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h5 class="unnumbered anchored" data-anchor-id="policy">Policy</h5>
 <div class="cell">
 <div class="cell-output-display">
-
 <div class="datatables html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-f5d0734599265f9a7de6" style="width:100%;height:auto;"></div>
 <script type="application/json" data-for="htmlwidget-f5d0734599265f9a7de6">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6"],["201601010001","201601010002","201601010003","201601010004","201601010005","201601010006"],["2016-01-01","2016-01-01","2016-01-01","2016-01-01","2016-01-01","2016-01-01"],["2017-01-01","2017-01-01","2017-01-01","2017-01-01","2017-01-01","2017-01-01"],["B","B","B","B","B","B"],[1,1,1,1,1,1],[3,3,3,3,3,3],[913,913,913,913,913,913]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>pol_number<\/th>\n      <th>date_UW<\/th>\n      <th>date_lapse<\/th>\n      <th>Cover<\/th>\n      <th>Brand<\/th>\n      <th>Model<\/th>\n      <th>Price<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[5,6,7]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 </div>
@@ -1100,7 +1152,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h5 class="unnumbered anchored" data-anchor-id="claim">Claim</h5>
 <div class="cell">
 <div class="cell-output-display">
-
 <div class="datatables html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-bd4a94607247107b5d4d" style="width:100%;height:auto;"></div>
 <script type="application/json" data-for="htmlwidget-bd4a94607247107b5d4d">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6"],["201606080001","201609150001","201609090001","201602190001","201605140001","201612110001"],["201601010001","201601010014","201601010025","201601010027","201601010043","201601010045"],["B","B","B","B","B","B"],[1,1,1,1,1,1],[0.3337922623556279,0.3692033776771376,0.4496011811952987,0.4019731216155807,0.2146652964362402,0.2783312872312585],["2016-06-08","2016-09-15","2016-09-09","2016-01-25","2016-05-14","2016-12-11"],["2016-06-08","2016-09-15","2016-09-09","2016-02-19","2016-05-14","2016-12-11"],["2016-07-21","2016-10-17","2016-10-07","2016-03-21","2016-06-15","2017-01-06"],[305,309,357,319,196,254]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>clm_number<\/th>\n      <th>pol_number<\/th>\n      <th>claim_type<\/th>\n      <th>claim_count<\/th>\n      <th>claim_sev<\/th>\n      <th>date_occur<\/th>\n      <th>date_report<\/th>\n      <th>date_pay<\/th>\n      <th>claim_cost<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[4,5,9]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 </div>
@@ -1136,7 +1187,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>The first few rows of the resulting table are shown below where we can see the first policy has an attached claim.</p>
 <div class="cell">
 <div class="cell-output-display">
-
 <div class="datatables html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-9786c2a0d7ceda175678" style="width:100%;height:auto;"></div>
 <script type="application/json" data-for="htmlwidget-9786c2a0d7ceda175678">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6"],["201601010001","201601010002","201601010003","201601010004","201601010005","201601010006"],["201606080001",null,null,null,null,null],["B",null,null,null,null,null],[1,null,null,null,null,null],[0.3337922623556279,null,null,null,null,null],["2016-06-08T00:00:00Z",null,null,null,null,null],["2016-06-08T00:00:00Z",null,null,null,null,null],["2016-07-21T00:00:00Z",null,null,null,null,null],[305,null,null,null,null,null],["2016-01-01T00:00:00Z","2016-01-01T00:00:00Z","2016-01-01T00:00:00Z","2016-01-01T00:00:00Z","2016-01-01T00:00:00Z","2016-01-01T00:00:00Z"],["2016-12-31T23:59:59Z","2016-12-31T23:59:59Z","2016-12-31T23:59:59Z","2016-12-31T23:59:59Z","2016-12-31T23:59:59Z","2016-12-31T23:59:59Z"],["B","B","B","B","B","B"],[1,1,1,1,1,1],[3,3,3,3,3,3],[913,913,913,913,913,913]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>pol_number<\/th>\n      <th>clm_number<\/th>\n      <th>claim_type<\/th>\n      <th>claim_count<\/th>\n      <th>claim_sev<\/th>\n      <th>date_occur<\/th>\n      <th>date_report<\/th>\n      <th>date_pay<\/th>\n      <th>claim_cost<\/th>\n      <th>date_pol_start<\/th>\n      <th>date_pol_end<\/th>\n      <th>Cover<\/th>\n      <th>Brand<\/th>\n      <th>Model<\/th>\n      <th>Price<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[4,5,9,13,14,15]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 </div>
@@ -1176,7 +1226,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="cell">
 <div class="cell-output-display">
-
 <div class="datatables html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-2d1a8b3087e055618479" style="width:100%;height:auto;"></div>
 <script type="application/json" data-for="htmlwidget-2d1a8b3087e055618479">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6"],["201601010001","201601010002","201601010003","201601010004","201601010005","201601010006"],["201606080001",null,null,null,null,null],["B",null,null,null,null,null],[1,0,0,0,0,0],[0.3337922623556279,0,0,0,0,0],["2016-06-08T00:00:00Z","2199-12-31T23:59:59Z","2199-12-31T23:59:59Z","2199-12-31T23:59:59Z","2199-12-31T23:59:59Z","2199-12-31T23:59:59Z"],["2016-06-08T00:00:00Z","2199-12-31T23:59:59Z","2199-12-31T23:59:59Z","2199-12-31T23:59:59Z","2199-12-31T23:59:59Z","2199-12-31T23:59:59Z"],["2016-07-21T00:00:00Z","2199-12-31T23:59:59Z","2199-12-31T23:59:59Z","2199-12-31T23:59:59Z","2199-12-31T23:59:59Z","2199-12-31T23:59:59Z"],[305,0,0,0,0,0],["2016-01-01T00:00:00Z","2016-01-01T00:00:00Z","2016-01-01T00:00:00Z","2016-01-01T00:00:00Z","2016-01-01T00:00:00Z","2016-01-01T00:00:00Z"],["2016-12-31T23:59:59Z","2016-12-31T23:59:59Z","2016-12-31T23:59:59Z","2016-12-31T23:59:59Z","2016-12-31T23:59:59Z","2016-12-31T23:59:59Z"],["B","B","B","B","B","B"],[1,1,1,1,1,1],[3,3,3,3,3,3],[913,913,913,913,913,913],[1,1,1,1,1,1],[1,1,1,1,1,1],[2,2,2,2,2,2]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>pol_number<\/th>\n      <th>clm_number<\/th>\n      <th>claim_type<\/th>\n      <th>claim_count<\/th>\n      <th>claim_sev<\/th>\n      <th>date_occur<\/th>\n      <th>date_report<\/th>\n      <th>date_pay<\/th>\n      <th>claim_cost<\/th>\n      <th>date_pol_start<\/th>\n      <th>date_pol_end<\/th>\n      <th>Cover<\/th>\n      <th>Brand<\/th>\n      <th>Model<\/th>\n      <th>Price<\/th>\n      <th>pol_seq<\/th>\n      <th>pol_seq_max<\/th>\n      <th>ExpoDays<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[4,5,9,13,14,15,16,17,18]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 </div>
@@ -1190,7 +1239,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="Images/baudry_image_3.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Graphical representation of the PDMPP.</figcaption>
+<figcaption>Graphical representation of the PDMPP.</figcaption>
 </figure>
 </div>
 <p>In the code below, for every individual policy and claim transaction; ie row in <code>dt_polclaim</code>, we are creating an extra column for each possible timeslice and recording in the column the cumulative claim cost up to that time slice.</p>
@@ -1212,7 +1261,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Looking at the data can see the output of timeslicing. You’ll need to scroll to the right of the table to see the columns labeled <strong>P_t_20160101</strong> through to <strong>P_t_20190614</strong>.</p>
 <div class="cell">
 <div class="cell-output-display">
-
 <div class="datatables html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-4cd25e99139cb7f588cf" style="width:100%;height:auto;"></div>
 <script type="application/json" data-for="htmlwidget-4cd25e99139cb7f588cf">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6"],["201601010001","201601010002","201601010003","201601010004","201601010005","201601010006"],["201606080001",null,null,null,null,null],["B",null,null,null,null,null],[1,0,0,0,0,0],[0.3337922623556279,0,0,0,0,0],["2016-06-08T00:00:00Z","2199-12-31T23:59:59Z","2199-12-31T23:59:59Z","2199-12-31T23:59:59Z","2199-12-31T23:59:59Z","2199-12-31T23:59:59Z"],["2016-06-08T00:00:00Z","2199-12-31T23:59:59Z","2199-12-31T23:59:59Z","2199-12-31T23:59:59Z","2199-12-31T23:59:59Z","2199-12-31T23:59:59Z"],["2016-07-21T00:00:00Z","2199-12-31T23:59:59Z","2199-12-31T23:59:59Z","2199-12-31T23:59:59Z","2199-12-31T23:59:59Z","2199-12-31T23:59:59Z"],[305,0,0,0,0,0],["2016-01-01T00:00:00Z","2016-01-01T00:00:00Z","2016-01-01T00:00:00Z","2016-01-01T00:00:00Z","2016-01-01T00:00:00Z","2016-01-01T00:00:00Z"],["2016-12-31T23:59:59Z","2016-12-31T23:59:59Z","2016-12-31T23:59:59Z","2016-12-31T23:59:59Z","2016-12-31T23:59:59Z","2016-12-31T23:59:59Z"],["B","B","B","B","B","B"],[1,1,1,1,1,1],[3,3,3,3,3,3],[913,913,913,913,913,913],[1,1,1,1,1,1],[1,1,1,1,1,1],[2,2,2,2,2,2],[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0],[305,0,0,0,0,0],[305,0,0,0,0,0],[305,0,0,0,0,0],[305,0,0,0,0,0],[305,0,0,0,0,0],[305,0,0,0,0,0],[305,0,0,0,0,0],[305,0,0,0,0,0],[305,0,0,0,0,0],[305,0,0,0,0,0],[305,0,0,0,0,0],[305,0,0,0,0,0],[305,0,0,0,0,0],[305,0,0,0,0,0],[305,0,0,0,0,0],[305,0,0,0,0,0],[305,0,0,0,0,0],[305,0,0,0,0,0],[305,0,0,0,0,0],[305,0,0,0,0,0],[305,0,0,0,0,0],[305,0,0,0,0,0],[305,0,0,0,0,0],[305,0,0,0,0,0],[305,0,0,0,0,0],[305,0,0,0,0,0],[305,0,0,0,0,0],[305,0,0,0,0,0],[305,0,0,0,0,0],[305,0,0,0,0,0],[305,0,0,0,0,0],[305,0,0,0,0,0],[305,0,0,0,0,0],[305,0,0,0,0,0],[305,0,0,0,0,0],[305,0,0,0,0,0]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>pol_number<\/th>\n      <th>clm_number<\/th>\n      <th>claim_type<\/th>\n      <th>claim_count<\/th>\n      <th>claim_sev<\/th>\n      <th>date_occur<\/th>\n      <th>date_report<\/th>\n      <th>date_pay<\/th>\n      <th>claim_cost<\/th>\n      <th>date_pol_start<\/th>\n      <th>date_pol_end<\/th>\n      <th>Cover<\/th>\n      <th>Brand<\/th>\n      <th>Model<\/th>\n      <th>Price<\/th>\n      <th>pol_seq<\/th>\n      <th>pol_seq_max<\/th>\n      <th>ExpoDays<\/th>\n      <th>P_t_20160101<\/th>\n      <th>P_t_20160131<\/th>\n      <th>P_t_20160301<\/th>\n      <th>P_t_20160331<\/th>\n      <th>P_t_20160430<\/th>\n      <th>P_t_20160530<\/th>\n      <th>P_t_20160629<\/th>\n      <th>P_t_20160729<\/th>\n      <th>P_t_20160828<\/th>\n      <th>P_t_20160927<\/th>\n      <th>P_t_20161027<\/th>\n      <th>P_t_20161126<\/th>\n      <th>P_t_20161226<\/th>\n      <th>P_t_20170125<\/th>\n      <th>P_t_20170224<\/th>\n      <th>P_t_20170326<\/th>\n      <th>P_t_20170425<\/th>\n      <th>P_t_20170525<\/th>\n      <th>P_t_20170624<\/th>\n      <th>P_t_20170724<\/th>\n      <th>P_t_20170823<\/th>\n      <th>P_t_20170922<\/th>\n      <th>P_t_20171022<\/th>\n      <th>P_t_20171121<\/th>\n      <th>P_t_20171221<\/th>\n      <th>P_t_20180120<\/th>\n      <th>P_t_20180219<\/th>\n      <th>P_t_20180321<\/th>\n      <th>P_t_20180420<\/th>\n      <th>P_t_20180520<\/th>\n      <th>P_t_20180619<\/th>\n      <th>P_t_20180719<\/th>\n      <th>P_t_20180818<\/th>\n      <th>P_t_20180917<\/th>\n      <th>P_t_20181017<\/th>\n      <th>P_t_20181116<\/th>\n      <th>P_t_20181216<\/th>\n      <th>P_t_20190115<\/th>\n      <th>P_t_20190214<\/th>\n      <th>P_t_20190316<\/th>\n      <th>P_t_20190415<\/th>\n      <th>P_t_20190515<\/th>\n      <th>P_t_20190614<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[4,5,9,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 </div>
@@ -1340,18 +1388,38 @@ Interested readers are encouraged to come back to this stage and inspect the cod
 <p>The RBNS train and test datasets are created by calling the <code>RBNS_Train</code> and <code>RBNS_Test</code> functions passing, as parameters to them, the names of the joined policy and claim dataset, valuation dates and model features.</p>
 <p>The functions <code>RBNS_Train</code> and <code>RBNS_Test</code> iterate over valid values of j and k calling the <code>RBNS_Train_ijk</code> and <code>RBNS_Test_ijk</code> functions to create the complete train and test datasets as illustrated below.</p>
 <div id="fig-elephants" class="quarto-layout-panel">
-<figure class="figure">
-<div class="quarto-layout-row quarto-layout-valign-top">
-<div class="quarto-layout-cell quarto-layout-cell-subref" style="flex-basis: 50.0%;justify-content: center;">
-<div id="fig-baudry-left" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="Images/baudry_image_5a.png" class="img-fluid figure-img" data-ref-parent="fig-elephants"></p>
-<figcaption class="figure-caption">(a) Left chart, j=1, k=1</figcaption>
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-elephants-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-elephants" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-baudry-left" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-baudry-left-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="Images/baudry_image_5a.png" class="img-fluid figure-img" data-ref-parent="fig-elephants">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-baudry-left-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a) Left chart, j=1, k=1
+</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-elephants" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-baudry-right" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-baudry-right-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="Images/baudry_image_6a.png" class="img-fluid figure-img" data-ref-parent="fig-elephants">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-baudry-right-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(b) Right chart, j=2, k=1
+</figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p></p><figcaption class="figure-caption">Figure&nbsp;13.1: <img src="Images/baudry_image_6a.png" id="fig-baudry-right" class="img-fluid figure-img" data-ref-parent="fig-elephants" alt="(b) Right chart, j=2, k=1"></figcaption><p></p>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-elephants-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;13.1
+</figcaption>
 </figure>
 </div>
 <div class="cell">
@@ -1381,10 +1449,14 @@ Interested readers are encouraged to come back to this stage and inspect the cod
 <span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The animation below attempts to summarise the overall data preparation and model prediction process.</p>
-<div id="fig-baudry-triangle" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="Images/baudry_triangles.gif" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Figure&nbsp;13.2: Illustration of the data preparation and model prediction process</figcaption>
+<div id="fig-baudry-triangle" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-baudry-triangle-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="Images/baudry_triangles.gif" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-baudry-triangle-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;13.2: Illustration of the data preparation and model prediction process
+</figcaption>
 </figure>
 </div>
 <p>So having given a rough outline of the data creation process let’s now call the functions to create the RBNS datasets.</p>
@@ -1707,7 +1779,6 @@ Interested readers are encouraged to come back to this stage and inspect the cod
 </ol>
 <div class="cell">
 <div class="cell-output-display">
-
 <div class="datatables html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-d4e0fe30b129c88a4061" style="width:100%;height:auto;"></div>
 <script type="application/json" data-for="htmlwidget-d4e0fe30b129c88a4061">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6"],["201601060001","201601080001","201601080002","201601090001","201601090002","201601100001"],["201601050343","201601040365","201601040629","201601010222","201601030514","201601010095"],[8,8,8,8,8,8],[1,1,1,1,1,1],["2016-01-05T00:00:00Z","2016-01-04T00:00:00Z","2016-01-04T00:00:00Z","2016-01-01T00:00:00Z","2016-01-03T00:00:00Z","2016-01-01T00:00:00Z"],["2016-01-06T00:00:00Z","2016-01-08T00:00:00Z","2016-01-08T00:00:00Z","2016-01-09T00:00:00Z","2016-01-07T00:00:00Z","2016-01-10T00:00:00Z"],["2016-01-06T00:00:00Z","2016-01-08T00:00:00Z","2016-01-08T00:00:00Z","2016-01-09T00:00:00Z","2016-01-09T00:00:00Z","2016-01-10T00:00:00Z"],["2016-02-08T00:00:00Z","2016-02-13T00:00:00Z","2016-02-07T00:00:00Z","2016-02-05T00:00:00Z","2016-02-09T00:00:00Z","2016-02-06T00:00:00Z"],["BOT","BOT","BO","BOT","BO","B"],["B","B","B","B","O","B"],[1,2,2,1,2,2],[3,2,2,3,3,3],[913,728,728,913,837,837],[0,0,0,0,0,0],[1,1,1,1,1,1],[1,1,1,1,1,1],[1,4,4,8,4,9],[0,0,0,0,2,0],[266,267,267,270,268,270],[33,36,30,27,31,27],[16805,16804,16804,16801,16803,16801]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>clm_number<\/th>\n      <th>pol_number<\/th>\n      <th>j<\/th>\n      <th>k<\/th>\n      <th>date_pol_start<\/th>\n      <th>date_occur<\/th>\n      <th>date_report<\/th>\n      <th>date_pay<\/th>\n      <th>Cover<\/th>\n      <th>claim_type<\/th>\n      <th>Brand<\/th>\n      <th>Model<\/th>\n      <th>Price<\/th>\n      <th>target<\/th>\n      <th>flgTrain<\/th>\n      <th>Count<\/th>\n      <th>delay_uw_occ<\/th>\n      <th>delay_occ_rep<\/th>\n      <th>delay_uw_val<\/th>\n      <th>delay_rep_pay<\/th>\n      <th>date_uw<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[3,4,11,12,13,14,15,16,17,18,19,20,21]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 </div>
@@ -1720,7 +1791,6 @@ Interested readers are encouraged to come back to this stage and inspect the cod
 <p>Again the the same 3 principles apply to the IBNR row count. However this will lead to many more rows of data because we are training two models and the claim frequency model will require a row for every past policy exposure period and of course there should be orders of magnitude more exposure rows than claim rows!</p>
 <div class="cell">
 <div class="cell-output-display">
-
 <div class="datatables html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-cad8703dcdfef1de0dd3" style="width:100%;height:auto;"></div>
 <script type="application/json" data-for="htmlwidget-cad8703dcdfef1de0dd3">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6"],[null,null,null,null,null,null],["201601010002","201601010003","201601010004","201601010005","201601010006","201601010007"],[1,1,1,1,1,1],[1,1,1,1,1,1],[0.74,0.74,0.74,0.74,0.74,0.74],["2016-01-01T00:00:00Z","2016-01-01T00:00:00Z","2016-01-01T00:00:00Z","2016-01-01T00:00:00Z","2016-01-01T00:00:00Z","2016-01-01T00:00:00Z"],["2199-12-31T23:59:59Z","2199-12-31T23:59:59Z","2199-12-31T23:59:59Z","2199-12-31T23:59:59Z","2199-12-31T23:59:59Z","2199-12-31T23:59:59Z"],["2199-12-31T23:59:59Z","2199-12-31T23:59:59Z","2199-12-31T23:59:59Z","2199-12-31T23:59:59Z","2199-12-31T23:59:59Z","2199-12-31T23:59:59Z"],["2199-12-31T23:59:59Z","2199-12-31T23:59:59Z","2199-12-31T23:59:59Z","2199-12-31T23:59:59Z","2199-12-31T23:59:59Z","2199-12-31T23:59:59Z"],["B","B","B","B","B","B"],[1,1,1,1,1,1],[3,3,3,3,3,3],[913,913,913,913,913,913],[0,0,0,0,0,0],[1,1,1,1,1,1],[2067788,2067788,2067788,2067788,2067788,2067788],[-1,-1,-1,-1,-1,-1],[-1,-1,-1,-1,-1,-1],[-1,-1,-1,-1,-1,-1],[270,270,270,270,270,270],[16801,16801,16801,16801,16801,16801]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>clm_number<\/th>\n      <th>pol_number<\/th>\n      <th>j<\/th>\n      <th>k<\/th>\n      <th>exposure<\/th>\n      <th>date_pol_start<\/th>\n      <th>date_occur<\/th>\n      <th>date_report<\/th>\n      <th>date_pay<\/th>\n      <th>Cover<\/th>\n      <th>Brand<\/th>\n      <th>Model<\/th>\n      <th>Price<\/th>\n      <th>target<\/th>\n      <th>flgTrain<\/th>\n      <th>Count<\/th>\n      <th>delay_uw_occ<\/th>\n      <th>delay_occ_rep<\/th>\n      <th>delay_rep_pay<\/th>\n      <th>delay_uw_val<\/th>\n      <th>date_uw<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[3,4,5,11,12,13,14,15,16,17,18,19,20,21]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 </div>
@@ -1798,14 +1868,18 @@ Interested readers are encouraged to come back to this stage and inspect the cod
 </div>
 <div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(dt_All_RBNS[rowList_RBNS<span class="sc">$</span>train, target])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="baudry_files/figure-html/unnamed-chunk-52-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="baudry_files/figure-html/unnamed-chunk-52-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>In a real world example a process of parameter tuning would be undertaken in order to select more optimal parameters.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>param <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
 <span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">objective =</span> <span class="st">"reg:tweedie"</span>,</span>
-<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">max_depth =</span> 2L,            <span class="co"># tree-depth</span></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">max_depth =</span> <span class="dv">2</span>L,            <span class="co"># tree-depth</span></span>
 <span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">subsample =</span> <span class="fl">0.75</span>,          <span class="co"># randomly sample rows before fitting each tree</span></span>
 <span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">colsample_bytree =</span> <span class="fl">0.8</span>,    <span class="co"># randomly sample columns before fitting each tree</span></span>
 <span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">min.child.weight =</span> <span class="dv">10</span>,     <span class="co"># minimum weight per leaf</span></span>
@@ -1821,8 +1895,8 @@ Interested readers are encouraged to come back to this stage and inspect the cod
 <span id="cb45-16"><a href="#cb45-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">data                   =</span> xgb.RBNS_DMat.train,</span>
 <span id="cb45-17"><a href="#cb45-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">nrounds                =</span> <span class="dv">500</span>,        <span class="co"># Maximum number of trees to build</span></span>
 <span id="cb45-18"><a href="#cb45-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">nfold =</span> <span class="dv">5</span>,</span>
-<span id="cb45-19"><a href="#cb45-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">early_stopping_rounds  =</span> 10L,        <span class="co"># Stops algorithm early if performance has not improved in </span></span>
-<span id="cb45-20"><a href="#cb45-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">print_every_n          =</span> 10L,        <span class="co"># How often to print to console</span></span>
+<span id="cb45-19"><a href="#cb45-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">early_stopping_rounds  =</span> <span class="dv">10</span>L,        <span class="co"># Stops algorithm early if performance has not improved in </span></span>
+<span id="cb45-20"><a href="#cb45-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">print_every_n          =</span> <span class="dv">10</span>L,        <span class="co"># How often to print to console</span></span>
 <span id="cb45-21"><a href="#cb45-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">prediction             =</span> <span class="cn">TRUE</span>        <span class="co"># Keeps the predictions</span></span>
 <span id="cb45-22"><a href="#cb45-22" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -1890,7 +1964,11 @@ Stopping. Best iteration:
 <span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>featImp_RBNS <span class="ot">&lt;-</span> <span class="fu">xgb.importance</span>(xgb_RBNS_Fit, <span class="at">feature_names =</span> <span class="fu">colnames</span>(xgb.RBNS_DMat.train))</span>
 <span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a><span class="fu">xgb.plot.importance</span>(featImp_RBNS, <span class="at">main=</span><span class="st">"Feature Importance - RBNS"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="baudry_files/figure-html/unnamed-chunk-56-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="baudry_files/figure-html/unnamed-chunk-56-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>An increasingly popular and more robust approach is to use SHAP values <a href="http://">https://github.com/slundberg/shap</a>. The SHAP equivalent of the feature importance chart is shown below.</p>
@@ -1904,7 +1982,11 @@ Stopping. Best iteration:
 <span id="cb52-7"><a href="#cb52-7" aria-hidden="true" tabindex="-1"></a><span class="co"># **SHAP summary plot**</span></span>
 <span id="cb52-8"><a href="#cb52-8" aria-hidden="true" tabindex="-1"></a><span class="fu">shap.plot.summary</span>(shap_long, <span class="at">dilute =</span> <span class="fu">nrow</span>(df.RBNS_train)<span class="sc">/</span><span class="dv">10000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="baudry_files/figure-html/unnamed-chunk-57-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="baudry_files/figure-html/unnamed-chunk-57-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>A second useful chart is the partial dependency plot. This shows how the values of a predictive a feature influence the predicted value, while holding all other values constant.</p>
@@ -1917,7 +1999,11 @@ Stopping. Best iteration:
 <span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a><span class="fu">wrap_plots</span>(fig_list, <span class="at">ncol =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="baudry_files/figure-html/unnamed-chunk-58-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="baudry_files/figure-html/unnamed-chunk-58-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>The feature importance and partial dependency plots provide quick insight into the model.</p>
@@ -1939,7 +2025,11 @@ Stopping. Best iteration:
 <span id="cb54-8"><a href="#cb54-8" aria-hidden="true" tabindex="-1"></a><span class="co"># it is also possible to set y-axis limit for zoom-in part alone using `y_zoomin_limit`  </span></span>
 <span id="cb54-9"><a href="#cb54-9" aria-hidden="true" tabindex="-1"></a><span class="fu">shap.plot.force_plot</span>(plot_data, <span class="at">zoom_in_location =</span> <span class="dv">500</span>, <span class="at">y_parent_limit =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>,<span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="baudry_files/figure-html/unnamed-chunk-59-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="baudry_files/figure-html/unnamed-chunk-59-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
@@ -1953,7 +2043,6 @@ Stopping. Best iteration:
 </div>
 <div class="cell">
 <div class="cell-output-display">
-
 <div class="datatables html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-e75724685c893033c695" style="width:100%;height:auto;"></div>
 <script type="application/json" data-for="htmlwidget-e75724685c893033c695">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6","7"],["2016.04","2016.05","2016.06","2016.07","2016.08","2016.09","Total"],[1309.541798572434,4741.940033007631,12517.64665996993,56011.40679002684,326241.3682431933,625187.373481669,1026009.277006439],[911,5188,14257,53815,326631,622179,1022981],[398.5417985724343,-446.0599669923686,-1739.353340030073,2196.406790026842,-389.6317568067461,3008.373481668998,3028.27700643905],[0.4374772761497633,-0.08597917636707181,-0.1219999537090603,0.04081402564390675,-0.001192880519016095,0.004835221827912864,0.002960247557324183]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>date_occur_YYYYMM<\/th>\n      <th>preds<\/th>\n      <th>target<\/th>\n      <th>Diff<\/th>\n      <th>Diff_pcnt<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"targets":5,"render":"function(data, type, row, meta) {\n    return type !== 'display' ? data : DTWidget.formatPercentage(data, 1, 3, \",\", \".\", null);\n  }"},{"targets":2,"render":"function(data, type, row, meta) {\n    return type !== 'display' ? data : DTWidget.formatRound(data, 0, 3, \",\", \".\", null);\n  }"},{"targets":3,"render":"function(data, type, row, meta) {\n    return type !== 'display' ? data : DTWidget.formatRound(data, 0, 3, \",\", \".\", null);\n  }"},{"targets":4,"render":"function(data, type, row, meta) {\n    return type !== 'display' ? data : DTWidget.formatRound(data, 0, 3, \",\", \".\", null);\n  }"},{"className":"dt-right","targets":[2,3,4,5]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":["options.columnDefs.0.render","options.columnDefs.1.render","options.columnDefs.2.render","options.columnDefs.3.render"],"jsHooks":[]}</script>
 </div>
@@ -2024,13 +2113,17 @@ Stopping. Best iteration:
 <div class="cell">
 <div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(dt_All_IBNR_F[rowList_IBNR_F<span class="sc">$</span>train, target_count])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="baudry_files/figure-html/unnamed-chunk-63-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="baudry_files/figure-html/unnamed-chunk-63-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>param <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
 <span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">objective =</span> <span class="st">"count:poisson"</span>,</span>
-<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">max_depth =</span> 2L,           <span class="co"># tree-depth</span></span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">max_depth =</span> <span class="dv">2</span>L,           <span class="co"># tree-depth</span></span>
 <span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">subsample =</span> <span class="fl">0.7</span>,          <span class="co"># randomly sample rows before fitting each tree</span></span>
 <span id="cb58-5"><a href="#cb58-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">colsample_bytree =</span> <span class="fl">0.8</span>,   <span class="co"># randomly sample columns before fitting each tree</span></span>
 <span id="cb58-6"><a href="#cb58-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">min.child.weight =</span> <span class="dv">10</span>,    <span class="co"># minimum weight per leaf</span></span>
@@ -2048,8 +2141,8 @@ Stopping. Best iteration:
 <span id="cb58-18"><a href="#cb58-18" aria-hidden="true" tabindex="-1"></a> <span class="at">nrounds                =</span> <span class="dv">2000</span>,        <span class="co"># Maximum number of trees to build</span></span>
 <span id="cb58-19"><a href="#cb58-19" aria-hidden="true" tabindex="-1"></a> <span class="at">nfold =</span> <span class="dv">5</span>,</span>
 <span id="cb58-20"><a href="#cb58-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-21"><a href="#cb58-21" aria-hidden="true" tabindex="-1"></a> <span class="at">early_stopping_rounds  =</span> 50L,        <span class="co"># Stops algorithm early if performance has not improved in n rounds</span></span>
-<span id="cb58-22"><a href="#cb58-22" aria-hidden="true" tabindex="-1"></a> <span class="at">print_every_n          =</span> 50L,        <span class="co"># How often to print to console</span></span>
+<span id="cb58-21"><a href="#cb58-21" aria-hidden="true" tabindex="-1"></a> <span class="at">early_stopping_rounds  =</span> <span class="dv">50</span>L,        <span class="co"># Stops algorithm early if performance has not improved in n rounds</span></span>
+<span id="cb58-22"><a href="#cb58-22" aria-hidden="true" tabindex="-1"></a> <span class="at">print_every_n          =</span> <span class="dv">50</span>L,        <span class="co"># How often to print to console</span></span>
 <span id="cb58-23"><a href="#cb58-23" aria-hidden="true" tabindex="-1"></a> <span class="co">#base_score             = 0.001,       # Model starting point</span></span>
 <span id="cb58-24"><a href="#cb58-24" aria-hidden="true" tabindex="-1"></a>   <span class="at">prediction             =</span> <span class="cn">TRUE</span>        <span class="co"># Keeps the predictions</span></span>
 <span id="cb58-25"><a href="#cb58-25" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -2111,7 +2204,11 @@ Stopping. Best iteration:
 <span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a>featImp_IBNR_F <span class="ot">&lt;-</span> <span class="fu">xgb.importance</span>(xgb_IBNR_F_Fit, <span class="at">feature_names =</span> <span class="fu">colnames</span>(xgb.IBNR_F_DMat.train))</span>
 <span id="cb64-3"><a href="#cb64-3" aria-hidden="true" tabindex="-1"></a><span class="fu">xgb.plot.importance</span>(featImp_IBNR_F, <span class="at">main=</span><span class="st">"Feature Importance - IBNR Frequency"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="baudry_files/figure-html/unnamed-chunk-67-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="baudry_files/figure-html/unnamed-chunk-67-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>An increasingly popular and more robust approach is to use SHAP values <a href="http://">https://github.com/slundberg/shap</a>. The SHAP equivalent of the feature importance chart is shown below.</p>
@@ -2125,7 +2222,11 @@ Stopping. Best iteration:
 <span id="cb65-7"><a href="#cb65-7" aria-hidden="true" tabindex="-1"></a><span class="co"># **SHAP summary plot**</span></span>
 <span id="cb65-8"><a href="#cb65-8" aria-hidden="true" tabindex="-1"></a><span class="fu">shap.plot.summary</span>(shap_long, <span class="at">dilute =</span> <span class="fu">nrow</span>(df.IBNR_F_train)<span class="sc">/</span><span class="dv">10000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="baudry_files/figure-html/unnamed-chunk-68-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="baudry_files/figure-html/unnamed-chunk-68-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>A second useful chart is the partial dependency plot. This shows how the values of a predictive a feature influence the predicted value, while holding all other values constant.</p>
@@ -2138,7 +2239,11 @@ Stopping. Best iteration:
 <span id="cb66-5"><a href="#cb66-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb66-6"><a href="#cb66-6" aria-hidden="true" tabindex="-1"></a><span class="fu">wrap_plots</span>(fig_list, <span class="at">ncol =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="baudry_files/figure-html/unnamed-chunk-69-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="baudry_files/figure-html/unnamed-chunk-69-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>The feature importance and partial dependency plots provide quick insight into the model.</p>
@@ -2160,7 +2265,11 @@ Stopping. Best iteration:
 <span id="cb67-8"><a href="#cb67-8" aria-hidden="true" tabindex="-1"></a><span class="co"># it is also possible to set y-axis limit for zoom-in part alone using `y_zoomin_limit`  </span></span>
 <span id="cb67-9"><a href="#cb67-9" aria-hidden="true" tabindex="-1"></a><span class="fu">shap.plot.force_plot</span>(plot_data, <span class="at">zoom_in_location =</span> <span class="dv">500</span>, <span class="at">y_parent_limit =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>,<span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="baudry_files/figure-html/unnamed-chunk-70-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="baudry_files/figure-html/unnamed-chunk-70-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
@@ -2172,7 +2281,6 @@ Stopping. Best iteration:
 </div>
 <div class="cell">
 <div class="cell-output-display">
-
 <div class="datatables html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-abfedf0a117e8bc682ba" style="width:100%;height:auto;"></div>
 <script type="application/json" data-for="htmlwidget-abfedf0a117e8bc682ba">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6","7","8","9","10"],["2016.01","2016.02","2016.03","2016.04","2016.05","2016.06","2016.07","2016.08","2016.09","Total"],[208.7712560745713,179.3910882241034,183.7727308390022,176.1270536071534,163.590983750255,154.368389668889,103.9043824874461,76.45198597254785,69.59951367485337,1315.977384298822],[168,176,160,164,195,179,170,162,59,1433],[40.77125607457128,3.391088224103441,23.77273083900218,12.12705360715336,-31.40901624974504,-24.63161033111101,-66.09561751255387,-85.54801402745215,10.59951367485337,-117.0226157011784],[0.2426860480629243,0.01926754672786046,0.1485795677437636,0.07394544882410584,-0.1610718782038207,-0.1376067616263185,-0.3887977500738463,-0.5280741606632849,0.1796527741500571,-0.08166267669307636]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>date_pol_start_YYYYMM<\/th>\n      <th>preds<\/th>\n      <th>target<\/th>\n      <th>Diff<\/th>\n      <th>Diff_pcnt<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"targets":5,"render":"function(data, type, row, meta) {\n    return type !== 'display' ? data : DTWidget.formatPercentage(data, 1, 3, \",\", \".\", null);\n  }"},{"targets":2,"render":"function(data, type, row, meta) {\n    return type !== 'display' ? data : DTWidget.formatRound(data, 0, 3, \",\", \".\", null);\n  }"},{"targets":3,"render":"function(data, type, row, meta) {\n    return type !== 'display' ? data : DTWidget.formatRound(data, 0, 3, \",\", \".\", null);\n  }"},{"targets":4,"render":"function(data, type, row, meta) {\n    return type !== 'display' ? data : DTWidget.formatRound(data, 0, 3, \",\", \".\", null);\n  }"},{"className":"dt-right","targets":[2,3,4,5]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":["options.columnDefs.0.render","options.columnDefs.1.render","options.columnDefs.2.render","options.columnDefs.3.render"],"jsHooks":[]}</script>
 </div>
@@ -2244,13 +2352,17 @@ Stopping. Best iteration:
     3.0   125.5   255.0   353.9   486.5  2011.0 </code></pre>
 </div>
 <div class="cell-output-display">
-<p><img src="baudry_files/figure-html/unnamed-chunk-74-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="baudry_files/figure-html/unnamed-chunk-74-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a>param <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
 <span id="cb71-2"><a href="#cb71-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">objective =</span> <span class="st">"reg:gamma"</span>,</span>
-<span id="cb71-3"><a href="#cb71-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">max_depth =</span> 2L,           <span class="co"># tree-depth</span></span>
+<span id="cb71-3"><a href="#cb71-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">max_depth =</span> <span class="dv">2</span>L,           <span class="co"># tree-depth</span></span>
 <span id="cb71-4"><a href="#cb71-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">subsample =</span> <span class="fl">0.7</span>,          <span class="co"># randomly sample rows before fitting each tree</span></span>
 <span id="cb71-5"><a href="#cb71-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">colsample_bytree =</span> <span class="fl">0.8</span>,   <span class="co"># randomly sample columns before fitting each tree</span></span>
 <span id="cb71-6"><a href="#cb71-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">min.child.weight =</span> <span class="dv">10</span>,    <span class="co"># minimum weight per leaf</span></span>
@@ -2267,8 +2379,8 @@ Stopping. Best iteration:
 <span id="cb71-17"><a href="#cb71-17" aria-hidden="true" tabindex="-1"></a> <span class="at">nrounds                =</span> <span class="dv">2000</span>,        <span class="co"># Maximum number of trees to build</span></span>
 <span id="cb71-18"><a href="#cb71-18" aria-hidden="true" tabindex="-1"></a> <span class="at">nfold =</span> <span class="dv">5</span>,</span>
 <span id="cb71-19"><a href="#cb71-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb71-20"><a href="#cb71-20" aria-hidden="true" tabindex="-1"></a> <span class="at">early_stopping_rounds  =</span> 50L,        <span class="co"># Stops algorithm early if performance has not improved in n rounds</span></span>
-<span id="cb71-21"><a href="#cb71-21" aria-hidden="true" tabindex="-1"></a> <span class="at">print_every_n          =</span> 50L,        <span class="co"># How often to print to console</span></span>
+<span id="cb71-20"><a href="#cb71-20" aria-hidden="true" tabindex="-1"></a> <span class="at">early_stopping_rounds  =</span> <span class="dv">50</span>L,        <span class="co"># Stops algorithm early if performance has not improved in n rounds</span></span>
+<span id="cb71-21"><a href="#cb71-21" aria-hidden="true" tabindex="-1"></a> <span class="at">print_every_n          =</span> <span class="dv">50</span>L,        <span class="co"># How often to print to console</span></span>
 <span id="cb71-22"><a href="#cb71-22" aria-hidden="true" tabindex="-1"></a> <span class="co">#base_score             = 0.001,       # Model starting point</span></span>
 <span id="cb71-23"><a href="#cb71-23" aria-hidden="true" tabindex="-1"></a>   <span class="at">prediction             =</span> <span class="cn">TRUE</span>        <span class="co"># Keeps the predictions</span></span>
 <span id="cb71-24"><a href="#cb71-24" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -2325,7 +2437,11 @@ Stopping. Best iteration:
 <span id="cb77-2"><a href="#cb77-2" aria-hidden="true" tabindex="-1"></a>featImp_IBNR_S <span class="ot">&lt;-</span> <span class="fu">xgb.importance</span>(xgb_IBNR_S_Fit, <span class="at">feature_names =</span> <span class="fu">colnames</span>(xgb.IBNR_S_DMat.train))</span>
 <span id="cb77-3"><a href="#cb77-3" aria-hidden="true" tabindex="-1"></a><span class="fu">xgb.plot.importance</span>(featImp_IBNR_S, <span class="at">main=</span><span class="st">"Feature Importance - IBNR Severity"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="baudry_files/figure-html/unnamed-chunk-79-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="baudry_files/figure-html/unnamed-chunk-79-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>An increasingly popular and more robust approach is to use SHAP values <a href="http://">https://github.com/slundberg/shap</a>. The SHAP equivalent of the feature importance chart is shown below.</p>
@@ -2339,7 +2455,11 @@ Stopping. Best iteration:
 <span id="cb78-7"><a href="#cb78-7" aria-hidden="true" tabindex="-1"></a><span class="co"># **SHAP summary plot**</span></span>
 <span id="cb78-8"><a href="#cb78-8" aria-hidden="true" tabindex="-1"></a><span class="fu">shap.plot.summary</span>(shap_long, <span class="at">dilute =</span> <span class="fu">max</span>(<span class="fu">nrow</span>(df.IBNR_S_train),<span class="dv">10000</span>)<span class="sc">/</span><span class="dv">10000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="baudry_files/figure-html/unnamed-chunk-80-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="baudry_files/figure-html/unnamed-chunk-80-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>A second useful chart is the partial dependency plot. This shows how the values of a predictive a feature influence the predicted value, while holding all other values constant.</p>
@@ -2352,7 +2472,11 @@ Stopping. Best iteration:
 <span id="cb79-5"><a href="#cb79-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb79-6"><a href="#cb79-6" aria-hidden="true" tabindex="-1"></a><span class="fu">wrap_plots</span>(fig_list, <span class="at">ncol =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="baudry_files/figure-html/unnamed-chunk-81-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="baudry_files/figure-html/unnamed-chunk-81-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>The feature importance and partial dependency plots provide quick insight into the model.</p>
@@ -2379,7 +2503,11 @@ Stopping. Best iteration:
 <pre><code>Data has N = 1111 | zoom in length is 111 at location 500.</code></pre>
 </div>
 <div class="cell-output-display">
-<p><img src="baudry_files/figure-html/unnamed-chunk-82-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="baudry_files/figure-html/unnamed-chunk-82-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
@@ -2391,7 +2519,6 @@ Stopping. Best iteration:
 </div>
 <div class="cell">
 <div class="cell-output-display">
-
 <div class="datatables html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-ad51be6f30451dc523b4" style="width:100%;height:auto;"></div>
 <script type="application/json" data-for="htmlwidget-ad51be6f30451dc523b4">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6","7","8","9","10"],["2016.01","2016.02","2016.03","2016.04","2016.05","2016.06","2016.07","2016.08","2016.09","Total"],[55246.27558135986,52328.74839019775,50610.62488937378,51905.98536300659,65193.41148376465,57395.76635360718,55366.83613967896,55975.39280319214,20289.00172042847,464312.0427246094],[52782,55615,47200,56975,64833,52989,50276,53502,18989,453161],[2464.275581359863,-3286.251609802246,3410.624889373779,-5069.014636993408,360.4114837646484,4406.766353607178,5090.836139678955,2473.392803192139,1300.001720428467,11151.04272460938],[0.04668780230684444,-0.05908930342177913,0.07225900189351227,-0.08896910288711554,0.005559074603437269,0.08316379538408307,0.1012577798488137,0.04622991296011623,0.06846077836792179,0.02460724273406003]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>date_pol_start_YYYYMM<\/th>\n      <th>preds<\/th>\n      <th>target<\/th>\n      <th>Diff<\/th>\n      <th>Diff_pcnt<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"targets":5,"render":"function(data, type, row, meta) {\n    return type !== 'display' ? data : DTWidget.formatPercentage(data, 1, 3, \",\", \".\", null);\n  }"},{"targets":2,"render":"function(data, type, row, meta) {\n    return type !== 'display' ? data : DTWidget.formatRound(data, 0, 3, \",\", \".\", null);\n  }"},{"targets":3,"render":"function(data, type, row, meta) {\n    return type !== 'display' ? data : DTWidget.formatRound(data, 0, 3, \",\", \".\", null);\n  }"},{"targets":4,"render":"function(data, type, row, meta) {\n    return type !== 'display' ? data : DTWidget.formatRound(data, 0, 3, \",\", \".\", null);\n  }"},{"className":"dt-right","targets":[2,3,4,5]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":["options.columnDefs.0.render","options.columnDefs.1.render","options.columnDefs.2.render","options.columnDefs.3.render"],"jsHooks":[]}</script>
 </div>
@@ -2405,7 +2532,6 @@ Stopping. Best iteration:
 <p>Specifically we have shown how to apply the xgboost machine learning algorithm and illustrated how it can, with little human input, create reasonable reserve estimates as shown below.</p>
 <div class="cell">
 <div class="cell-output-display">
-
 <div class="datatables html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-9c24bc6da9e7b5a9b6bd" style="width:100%;height:auto;"></div>
 <script type="application/json" data-for="htmlwidget-9c24bc6da9e7b5a9b6bd">{"x":{"filter":"none","vertical":false,"data":[["1","2","3"],["RBNS","IBNR","TOTAL"],[1026009.277006442,464312.0427246094,1490321.319731052],[1022981,453161,1476142],[3028.277006442077,11151.04272460938,14179.31973105157],[0.002960247557327142,0.02460724273406003,0.009605661061775607]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Reserve<\/th>\n      <th>Prediction<\/th>\n      <th>Ground_Truth<\/th>\n      <th>Diff<\/th>\n      <th>Diff_pcnt<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"targets":5,"render":"function(data, type, row, meta) {\n    return type !== 'display' ? data : DTWidget.formatPercentage(data, 1, 3, \",\", \".\", null);\n  }"},{"targets":2,"render":"function(data, type, row, meta) {\n    return type !== 'display' ? data : DTWidget.formatRound(data, 0, 3, \",\", \".\", null);\n  }"},{"targets":3,"render":"function(data, type, row, meta) {\n    return type !== 'display' ? data : DTWidget.formatRound(data, 0, 3, \",\", \".\", null);\n  }"},{"targets":4,"render":"function(data, type, row, meta) {\n    return type !== 'display' ? data : DTWidget.formatRound(data, 0, 3, \",\", \".\", null);\n  }"},{"className":"dt-right","targets":[2,3,4,5]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":["options.columnDefs.0.render","options.columnDefs.1.render","options.columnDefs.2.render","options.columnDefs.3.render"],"jsHooks":[]}</script>
 </div>
@@ -2452,18 +2578,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-  });
-  clipboard.on('success', function(e) {
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -2495,11 +2610,50 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
-  function tippyHover(el, contentFn) {
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -2509,8 +2663,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -2522,7 +2685,130 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -2566,6 +2852,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -2591,6 +2878,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -2652,17 +2965,18 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../Literature/literature.html" class="pagination-link">
+      <a href="../Literature/literature.html" class="pagination-link" aria-label="Literature review">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Literature review</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../Literature/history_nn_papers.html" class="pagination-link">
+      <a href="../Literature/history_nn_papers.html" class="pagination-link" aria-label="A brief history of papers looking at using neural networks in reserving">
         <span class="nav-page-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">A brief history of papers looking at using neural networks in reserving</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
 </div> <!-- /content -->
+
 
 
 
