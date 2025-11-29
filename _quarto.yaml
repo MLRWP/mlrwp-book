@@ -18,7 +18,7 @@ book:
       chapters:
         - Foundations/01_getting_started.qmd
         - Foundations/02_a_intro_to_r.qmd
-        - Foundations/02_b_intro_to_python.qmd
+        # # - Foundations/02_b_intro_to_python.qmd
         - Foundations/03_top_ten_r_packages.qmd
         - Foundations/04_a_tidyverse.qmd
         - Foundations/04_b_datatable.qmd
@@ -47,6 +47,9 @@ book:
         - Research/giro-2021-questions.qmd
         - Research/giro-2021-diagnostics.qmd
         - Research/chainladder_to_individual_mdn.qmd
+        - Research/nn_intro.qmd
+        - Research/nn_diagnostics.qmd
+        - Research/nn_hyperparameters.qmd
 
     # Practical considerations
     - part: Practical/practical.qmd
