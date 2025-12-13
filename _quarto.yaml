@@ -1,6 +1,11 @@
 project:
   type: book
   output-dir: docs
+  render:
+    - "*.qmd"
+    - "*.ipynb"
+    - "!*.Rmd"
+    - "!documents/ipython/*.ipynb"   # https://quarto.org/docs/projects/quarto-projects.html#render-targets suggests it should work - try with updated quarto
 
 book:
   title: "Machine Learning in Non-Life Reserving"
@@ -47,9 +52,13 @@ book:
         - Research/giro-2021-questions.qmd
         - Research/giro-2021-diagnostics.qmd
         - Research/chainladder_to_individual_mdn.qmd
-        - Research/nn_intro.qmd
-        - Research/nn_diagnostics.qmd
-        - Research/nn_hyperparameters.qmd
+        - Research/icnn-2024-02-covering/index.ipynb
+        - Research/icnn-2024-01-explainer/index.ipynb
+        # # - Research/nn_intro.qmd
+        - Research/icnn-2024-03-diagnostics/index.ipynb
+        # # - Research/nn_diagnostics.qmd
+        - Research/icnn-2024-04-hyperparameters/index.ipynb
+        # # - Research/nn_hyperparameters.qmd
 
     # Practical considerations
     - part: Practical/practical.qmd
