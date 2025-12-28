@@ -11,6 +11,7 @@
 !.Rprofile
 !.nojekyll
 !*.qmd
+!*.ipynb
 !README.md
 !_quarto.yaml
 !*.Rproj

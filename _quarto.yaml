@@ -1,11 +1,15 @@
 project:
   type: book
   output-dir: docs
+  render:
+    - "*.qmd"
+    - "*.ipynb"
+
 
 book:
   title: "Machine Learning in Non-Life Reserving"
   author: "Machine Learning in Reserving Working Party"
-  date: "12 October 2025"
+  date: "28 December 2025"
   page-navigation: true
   chapters:
     # introduction material
@@ -46,6 +50,10 @@ book:
         - Research/giro-2021-questions.qmd
         - Research/giro-2021-diagnostics.qmd
         - Research/chainladder_to_individual_mdn.qmd
+        - Research/20240427_nn_covering.ipynb
+        - Research/20240428_nn_explainer.ipynb
+        - Research/20240429_nn_diagnostics.ipynb
+        - Research/20241020_nn_hyperparameters.ipynb
 
     # Practical considerations
     - part: Practical/practical.qmd
